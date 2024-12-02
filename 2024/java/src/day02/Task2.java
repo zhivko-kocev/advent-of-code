@@ -8,14 +8,16 @@ import java.util.function.*;
 
 public class Task2 {
 
+    private static Stream<int[]> allWindows(int[] array, int size) {
+        return IntStream.range(0, array.length - size + 1)
+                .mapToObj(i -> Arrays.copyOfRange(array, i, i + size));
+    }
+
     private static boolean isSafe(int[] levels) {
         BiPredicate<Integer, Integer> isValid = (a, b) -> a - b >= 1 && a - b <= 3;
 
-        Stream<int[]> windows = IntStream.range(0, levels.length - 2 + 1)
-                .mapToObj(i -> Arrays.copyOfRange(levels, i, i + 2));
-
-        return windows.allMatch(window -> isValid.test(window[0], window[1]))
-                || windows.allMatch(window -> isValid.test(window[1], window[0]));
+        return allWindows(levels, 2).allMatch(window -> isValid.test(window[0], window[1]))
+                || allWindows(levels, 2).allMatch(window -> isValid.test(window[1], window[0]));
     }
 
     private static boolean safeAndFixed(int[] levels) {
@@ -37,7 +39,7 @@ public class Task2 {
                 .map(line -> Arrays.stream(line.split("\\s+"))
                         .mapToInt(Integer::parseInt)
                         .toArray())
-                .collect(Collectors.toList());
+                .toList();
 
         System.out.println(reports.stream().filter(Task2::safeAndFixed).count());
     }
