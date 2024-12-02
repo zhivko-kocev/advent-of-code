@@ -7,19 +7,18 @@ import java.util.stream.*;
 import java.util.function.*;
 
 public class Task2 {
-    private static Stream<int[]> allWindows(int[] array, int size) {
-        return IntStream.range(0, array.length - size + 1)
-                .mapToObj(i -> Arrays.copyOfRange(array, i, i + size));
-    }
 
     private static boolean isSafe(int[] levels) {
         BiPredicate<Integer, Integer> isValid = (a, b) -> a - b >= 1 && a - b <= 3;
 
-        return allWindows(levels, 2).allMatch(window -> isValid.test(window[0], window[1]))
-                || allWindows(levels, 2).allMatch(window -> isValid.test(window[1], window[0]));
+        Stream<int[]> windows = IntStream.range(0, levels.length - 2 + 1)
+                .mapToObj(i -> Arrays.copyOfRange(levels, i, i + 2));
+
+        return windows.allMatch(window -> isValid.test(window[0], window[1]))
+                || windows.allMatch(window -> isValid.test(window[1], window[0]));
     }
 
-    private static boolean remove(int[] levels) {
+    private static boolean safeAndFixed(int[] levels) {
         for (int i = 0; i < levels.length; i++) {
             int[] reducedLevels = IntStream.concat(
                     Arrays.stream(levels, 0, i),
@@ -40,7 +39,7 @@ public class Task2 {
                         .toArray())
                 .collect(Collectors.toList());
 
-        System.out.println(reports.stream().filter(Task2::remove).count());
+        System.out.println(reports.stream().filter(Task2::safeAndFixed).count());
     }
 
 }

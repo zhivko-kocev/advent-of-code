@@ -11,16 +11,14 @@ import java.util.stream.Stream;
 
 public class Task1 {
 
-    private static Stream<int[]> allWindows(int[] array, int size) {
-        return IntStream.range(0, array.length - size + 1)
-                .mapToObj(i -> Arrays.copyOfRange(array, i, i + size));
-    }
-
     private static boolean isSafe(int[] levels) {
         BiPredicate<Integer, Integer> isValid = (a, b) -> a - b >= 1 && a - b <= 3;
 
-        return allWindows(levels, 2).allMatch(window -> isValid.test(window[0], window[1]))
-                || allWindows(levels, 2).allMatch(window -> isValid.test(window[1], window[0]));
+        Stream<int[]> windows = IntStream.range(0, levels.length - 2 + 1)
+                .mapToObj(i -> Arrays.copyOfRange(levels, i, i + 2));
+
+        return windows.allMatch(window -> isValid.test(window[0], window[1]))
+                || windows.allMatch(window -> isValid.test(window[1], window[0]));
     }
 
     public static void main(String[] args) {
