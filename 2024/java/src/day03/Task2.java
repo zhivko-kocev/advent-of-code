@@ -33,6 +33,6 @@ public class Task2 {
             }
         }
 
-        System.out.println(sum); // Print the final sum
+        System.out.println(sum);
     }
 }
