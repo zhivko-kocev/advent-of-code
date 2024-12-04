@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class Task2 {
+public class Task2d1 {
 
     private static long countAppearance(List<Integer> list, int number) {
         return list.stream().filter(num -> num == number).count();
